@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+- Support irregular (rectilinear) chunk grids for Zarr v3 arrays. `zcreate`,
+  `zzeros`, and `ZArray(data; chunks=...)` accept `DiskArrays.GridChunks`, and
+  rectilinear metadata and exact-size chunks interoperate with zarr-python.
 - Move code to ZarrCore.jl with low dependencies
 - Move HTTP, GCS, S3, and ZIP backends into `ZarrHTTP`, `ZarrGCS`, `ZarrS3`, and `ZarrZip`.
 - Move Blosc, zlib, and Zstandard support into `ZarrBlosc`, `ZarrZlib`, and `ZarrZstd`; each provides its v2 compressor and v3 codec.

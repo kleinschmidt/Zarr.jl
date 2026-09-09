@@ -928,6 +928,25 @@ end
             @test eltype(z) == T
         end
     end
+
+    @testset "fill_as_missing for v3 arrays" begin
+        mktempdir() do dir
+            path = joinpath(dir, "fillmiss.zarr")
+            a = zcreate(Float64, 4, 6; path=path, zarr_format=3,
+                chunks=(2, 3), fill_value=0.0)
+            a[1:2, 1:3] = reshape(1.0:6.0, 2, 3)
+
+            b = zopen(path; fill_as_missing=true)
+            @test eltype(b) == Union{Missing,Float64}
+            @test b[1:2, 1:3] == reshape(1.0:6.0, 2, 3)
+            @test all(ismissing, b[3:4, 4:6])
+
+            c = zopen(path)
+            @test eltype(c) == Float64
+            @test c[1:2, 1:3] == reshape(1.0:6.0, 2, 3)
+            @test all(==(0.0), c[3:4, 4:6])
+        end
+    end
 end
 
 @testset "Read Python-generated v3 fixtures" begin
